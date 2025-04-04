@@ -1,0 +1,21 @@
+pipeline {
+    agent any
+    stages {
+        stage('PULL'){
+            steps {
+                git branch: 'dev', url: 'https://github.com/shubhamkalsait/igp-frontend-ticket-app.git'
+            }
+        }
+        stage('BUILD'){
+            steps {
+                sh '''npm install
+                    npm run build'''
+            }
+        }
+        stage('DEPLOY'){
+            steps {
+                sh 'aws s3 cp dist/ s3://igp-frontend-ticket-dev/ --recursive'
+            }
+        }
+    }
+}
